@@ -29,9 +29,9 @@ public class DomainEntity extends BaseEntity{
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @OneToMany(mappedBy = "domain")
+    @OneToMany(mappedBy = "domain",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<GroupDomainEntity> lstGroupDomains = new ArrayList<>();
 
-    @OneToMany(mappedBy = "domains")
+    @OneToMany(mappedBy = "domains",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<BasisDomainEntity> lstBasisDomains = new ArrayList<>();
 }

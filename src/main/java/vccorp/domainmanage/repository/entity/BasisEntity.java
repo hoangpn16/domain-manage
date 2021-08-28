@@ -19,6 +19,6 @@ public class BasisEntity extends BaseEntity{
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @OneToMany(mappedBy = "basis")
+    @OneToMany(mappedBy = "basis",fetch = FetchType.LAZY)
     List<BasisDomainEntity> listBasisDomains = new ArrayList<>();
 }

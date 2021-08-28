@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface DomainRepository extends JpaRepository<DomainEntity,Integer> {
-    DomainEntity findByIdAndStatusNot(Long domainId, Status status);
+    DomainEntity findByIdAndStatus(Long domainId, Status status);
 
-    List<DomainEntity> findAllByStatusNot(Status status);
+    List<DomainEntity> findAllByStatus(Status status);
 }

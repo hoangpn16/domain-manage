@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import vccorp.domainmanage.converter.Converter;
 import vccorp.domainmanage.dto.request.NewBasisRequest;
 import vccorp.domainmanage.dto.request.UpdateBasisRequest;
@@ -30,6 +31,7 @@ public class BasisService implements BasisInterface {
     private ResponseFactory factory;
 
     @Override
+    @Transactional
     public ResponseEntity addBasis(NewBasisRequest request) {
         BasisEntity entity = new BasisEntity();
         AppUtils.copyPropertiesIgnoreNull(request, entity);
@@ -42,6 +44,7 @@ public class BasisService implements BasisInterface {
     }
 
     @Override
+    @Transactional
     public ResponseEntity updateBasis(Long basisId, UpdateBasisRequest request) {
         BasisEntity entity = findById(basisId);
         AppUtils.copyPropertiesIgnoreNull(request, entity);
@@ -51,22 +54,22 @@ public class BasisService implements BasisInterface {
     }
 
     @Override
+    @Transactional
     public ResponseEntity deleteBasis(Long basisId) {
         BasisEntity entity = findById(basisId);
-        entity.setStatus(Status.DELETED);
-        basisRepository.save(entity);
+        basisRepository.delete(entity);
         return factory.success("Deleted",String.class);
     }
 
     @Override
     public ResponseEntity getAllBasis() {
-        List<BasisEntity> listBasis = basisRepository.findAllByStatusNot(Status.DELETED);
+        List<BasisEntity> listBasis = basisRepository.findAllByStatus(Status.ACTIVE);
         List<BasisResponse> data = Converter.toList(listBasis,BasisResponse.class);
         return factory.success(data,List.class);
     }
 
     public BasisEntity findById(Long id) {
-        BasisEntity entity = basisRepository.findByIdAndStatusNot(id, Status.DELETED);
+        BasisEntity entity = basisRepository.findByIdAndStatus(id, Status.ACTIVE);
         if (entity == null) {
             logger.info("Không tìm thấy basis id {}", id);
             throw new AppException(ErrorCode.ENTITY_NOT_FOUND);

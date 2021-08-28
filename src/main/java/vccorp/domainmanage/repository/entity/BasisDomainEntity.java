@@ -11,15 +11,15 @@ import java.util.List;
 @Table(name = "basis_domain")
 @Getter @Setter
 public class BasisDomainEntity extends BaseEntity{
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "basis_id")
     private BasisEntity basis;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "domain_id")
     private DomainEntity domains;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mode_id")
     private ModeEntity modes;
 

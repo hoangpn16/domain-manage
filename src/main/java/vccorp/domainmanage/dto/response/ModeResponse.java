@@ -18,5 +18,4 @@ public class ModeResponse{
     private Timestamp createdTime;
     private Timestamp updatedTime;
 
-
 }

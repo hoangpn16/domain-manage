@@ -18,5 +18,5 @@ public class GroupResponse{
     private Status status;
     private Timestamp createdTime;
     private Timestamp updatedTime;
-    private List<GroupDomainEntity> listGroupDomains = new ArrayList<>();
+//    private List<GroupDomainEntity> listGroupDomains = new ArrayList<>();
 }

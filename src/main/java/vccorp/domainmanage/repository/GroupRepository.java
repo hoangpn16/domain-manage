@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface GroupRepository extends JpaRepository<GroupEntity,Integer> {
-    GroupEntity findByIdAndStatusNot(Long id, Status status);
+    GroupEntity findByIdAndStatus(Long id, Status status);
 
-    List<GroupEntity> findAllByStatusNot(Status status);
+    List<GroupEntity> findAllByStatus(Status status);
 }

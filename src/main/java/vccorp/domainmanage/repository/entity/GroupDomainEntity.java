@@ -13,7 +13,7 @@ public class GroupDomainEntity extends BaseEntity{
     @JoinColumn(name = "group_id")
     private GroupEntity group;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "domain_id")
     private DomainEntity domain;
 

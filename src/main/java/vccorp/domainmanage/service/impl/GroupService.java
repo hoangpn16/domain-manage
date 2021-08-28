@@ -61,21 +61,23 @@ public class GroupService implements GroupInterface {
     @Transactional
     public ResponseEntity deleteGroup(Long groupId) {
         GroupEntity entity = findById(groupId);
-        entity.setStatus(Status.DELETED);
-        groupRepository.save(entity);
+
+        groupRepository.delete(entity);
+
+
         return factory.success("Deleted", String.class);
     }
 
     @Override
     public ResponseEntity getAllGroup() {
-        List<GroupEntity> listGroup = groupRepository.findAllByStatusNot(Status.DELETED);
+        List<GroupEntity> listGroup = groupRepository.findAllByStatus(Status.ACTIVE);
         List<GroupResponse> data = Converter.toList(listGroup, GroupResponse.class);
 
         return factory.success(data, List.class);
     }
 
     public GroupEntity findById(Long id) {
-        GroupEntity entity = groupRepository.findByIdAndStatusNot(id, Status.DELETED);
+        GroupEntity entity = groupRepository.findByIdAndStatus(id, Status.ACTIVE);
         if (entity == null) {
             logger.info("Không tìm thấy group id {}", id);
             throw new AppException(ErrorCode.ENTITY_NOT_FOUND);

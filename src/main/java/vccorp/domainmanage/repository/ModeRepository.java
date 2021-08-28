@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface ModeRepository extends JpaRepository<ModeEntity, Integer> {
-    ModeEntity findByIdAndStatusNot(Long modeId, Status status);
+    ModeEntity findByIdAndStatus(Long modeId, Status status);
 
-    List<ModeEntity> findAllByStatusNot(Status status);
+    List<ModeEntity> findAllByStatus(Status status);
 }

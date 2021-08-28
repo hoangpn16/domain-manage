@@ -22,7 +22,7 @@ public class ModeEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @OneToMany(mappedBy = "modes")
+    @OneToMany(mappedBy = "modes",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     List<BasisDomainEntity> lsBasisDomains = new ArrayList<>();
 
 }

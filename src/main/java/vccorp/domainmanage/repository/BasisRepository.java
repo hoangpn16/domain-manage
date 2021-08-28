@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface BasisRepository extends JpaRepository<BasisEntity,Integer> {
-    BasisEntity findByIdAndStatusNot(Long id, Status status);
+    BasisEntity findByIdAndStatus(Long id, Status status);
 
-    List<BasisEntity> findAllByStatusNot(Status status);
+    List<BasisEntity> findAllByStatus(Status status);
 }

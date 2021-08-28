@@ -58,21 +58,20 @@ public class ModeService implements ModeInterface {
     @Transactional
     public ResponseEntity deleteMode(Long modeId) {
         ModeEntity entity = findById(modeId);
-        entity.setStatus(Status.DELETED);
-        modeRepository.save(entity);
+        modeRepository.delete(entity);
         return factory.success("Deleted", String.class);
 
     }
 
     @Override
     public ResponseEntity getAllMode() {
-        List<ModeEntity> listMode = modeRepository.findAllByStatusNot(Status.DELETED);
+        List<ModeEntity> listMode = modeRepository.findAllByStatus(Status.ACTIVE);
         List<ModeResponse> data = Converter.toList(listMode, ModeResponse.class);
         return factory.success(data, List.class);
     }
 
     public ModeEntity findById(Long id) {
-        ModeEntity entity = modeRepository.findByIdAndStatusNot(id, Status.DELETED);
+        ModeEntity entity = modeRepository.findByIdAndStatus(id, Status.ACTIVE);
         if (entity == null) {
             logger.info("Không tìm thấy mode id {}", id);
             throw new AppException(ErrorCode.ENTITY_NOT_FOUND);

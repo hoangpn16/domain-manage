@@ -22,6 +22,6 @@ public class GroupEntity extends BaseEntity{
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @OneToMany(mappedBy = "group",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "group",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<GroupDomainEntity> listGroupDomains = new ArrayList<>();
 }
