@@ -22,9 +22,7 @@ public class ModeEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @OneToMany(mappedBy = "currentMode")
+    @OneToMany(mappedBy = "modes")
     List<BasisDomainEntity> lsBasisDomains = new ArrayList<>();
 
-    @OneToMany(mappedBy = "mode",fetch = FetchType.EAGER)
-    List<BasisDomainModeEntity> listBasisDomainModeEntity = new ArrayList<>();
 }

@@ -6,7 +6,8 @@ public enum ErrorCode {
 
     SUCCESS(HttpStatus.OK, "200", "Thành công"),
     GENERAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "500", "Thất bại"),
-    ENTITY_NOT_FOUND(HttpStatus.NOT_FOUND,"501","Không tìm thấy thực thể")
+    ENTITY_NOT_FOUND(HttpStatus.NOT_FOUND,"501","Không tìm thấy thực thể"),
+    ENTITY_EXISTS(HttpStatus.CONFLICT,"502","Thực thể đã tồn tại")
     ;
 
 

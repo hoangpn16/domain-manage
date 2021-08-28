@@ -15,6 +15,7 @@ public class DomainResponse {
     private Logtype logType;
     private DomainType domainType;
     private Status status;
+    private Boolean isLive;
     private Timestamp createdTime;
     private Timestamp updatedTime;
 }

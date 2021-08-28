@@ -10,7 +10,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Table(name = "domain")
+@Table(name = "domains")
 @Entity
 @Getter @Setter
 public class DomainEntity extends BaseEntity{
@@ -32,6 +32,6 @@ public class DomainEntity extends BaseEntity{
     @OneToMany(mappedBy = "domain")
     private List<GroupDomainEntity> lstGroupDomains = new ArrayList<>();
 
-    @OneToMany(mappedBy = "domain")
+    @OneToMany(mappedBy = "domains")
     private List<BasisDomainEntity> lstBasisDomains = new ArrayList<>();
 }

@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Table(name = "groups")
+@Table(name = "group_by")
 @Entity
 @Getter @Setter
 public class GroupEntity extends BaseEntity{

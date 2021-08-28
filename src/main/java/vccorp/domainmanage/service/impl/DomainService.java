@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import vccorp.domainmanage.converter.Converter;
 import vccorp.domainmanage.dto.request.NewDomainRequest;
 
+import vccorp.domainmanage.dto.request.UpdateDomainRequest;
 import vccorp.domainmanage.dto.response.DomainResponse;
 import vccorp.domainmanage.enumerates.Status;
 import vccorp.domainmanage.exceptions.AppException;
@@ -16,6 +17,9 @@ import vccorp.domainmanage.factory.ResponseFactory;
 import vccorp.domainmanage.repository.*;
 import vccorp.domainmanage.repository.entity.*;
 import vccorp.domainmanage.service.DomainInterface;
+import vccorp.domainmanage.utils.AppUtils;
+
+import java.util.List;
 
 @Service
 public class DomainService implements DomainInterface {
@@ -25,8 +29,6 @@ public class DomainService implements DomainInterface {
     DomainRepository domainRepository;
     @Autowired
     BasisDomainRepository basisDomainRepository;
-    @Autowired
-    BasisDomainModeRepository basisDomainModeRepository;
     @Autowired
     BasisRepository basisRepository;
     @Autowired
@@ -50,12 +52,15 @@ public class DomainService implements DomainInterface {
         if (request.getLogType() != null) {
             domainEntity.setLogType(request.getLogType());
         }
+        if(request.getStatus() != null){
+            domainEntity.setStatus(request.getStatus());
+        }
         ModeEntity modeEntity = modeRepository.findByIdAndStatusNot(request.getModeId(),Status.DELETED);
         if(modeEntity == null){
             logger.info("Không tìm thấy mode id {}",request.getModeId());
             throw new AppException(ErrorCode.ENTITY_NOT_FOUND);
         }
-        domainRepository.save(domainEntity);
+        domainEntity=domainRepository.save(domainEntity);
         for (Long basisId : request.getListBasisId()) {
             BasisEntity basisEntity = basisRepository.findByIdAndStatusNot(basisId, Status.DELETED);
             if(basisEntity == null){
@@ -64,16 +69,13 @@ public class DomainService implements DomainInterface {
             }
 
             BasisDomainEntity basisDomainEntity = new BasisDomainEntity();
-            basisDomainEntity.setDomain(domainEntity);
+            basisDomainEntity.setDomains(domainEntity);
             basisDomainEntity.setBasis(basisEntity);
-            basisDomainEntity.setCurrentMode(modeEntity);
+            basisDomainEntity.setModes(modeEntity);
+            basisDomainEntity.setIsLive(true);
 
             basisDomainRepository.save(basisDomainEntity);
 
-            BasisDomainModeEntity basisDomainModeEntity = new BasisDomainModeEntity();
-            basisDomainModeEntity.setBasisDomain(basisDomainEntity);
-            basisDomainModeEntity.setMode(modeEntity);
-            basisDomainModeRepository.save(basisDomainModeEntity);
         }
         for (Long groupId: request.getGroupId()) {
             GroupEntity groupEntity = groupRepository.findByIdAndStatusNot(groupId,Status.DELETED);
@@ -88,6 +90,50 @@ public class DomainService implements DomainInterface {
 
         DomainResponse data = Converter.toModel(domainEntity, DomainResponse.class);
         return factory.success(data, DomainResponse.class);
+    }
+
+    @Override
+    public ResponseEntity updateDomain(Long domainId, UpdateDomainRequest request) {
+        DomainEntity entity= findByDomainId(domainId);
+
+        AppUtils.copyPropertiesIgnoreNull(request,entity);
+
+        entity = domainRepository.save(entity);
+        DomainResponse data = Converter.toModel(entity,DomainResponse.class);
+
+        return factory.success(data,DomainResponse.class);
+    }
+
+    @Override
+    public ResponseEntity deleteDomain(Long domainId) {
+        DomainEntity entity = findByDomainId(domainId);
+
+        entity.setStatus(Status.DELETED);
+        // Xóa các thực thể liên quan trong bảng trung gian group_domain
+        List<GroupDomainEntity> listGroupDomain = groupDomainRepository.findAllByDomainId(domainId);
+        groupDomainRepository.deleteAll(listGroupDomain);
+        //Xóa các thực thể liên quan trong bảng trung gian basis_domain
+        List<BasisDomainEntity> listBasisDomain = basisDomainRepository.findAllByDomains(domainId);
+        basisDomainRepository.deleteAll(listBasisDomain);
+
+        return factory.success("Deleted",String.class);
+    }
+
+    @Override
+    public ResponseEntity getAllDomains() {
+        List<DomainEntity> listDomain = domainRepository.findAllByStatusNot(Status.DELETED);
+        List<DomainResponse> data = Converter.toList(listDomain,DomainResponse.class);
+        return factory.success(data,List.class);
+    }
+
+    public DomainEntity findByDomainId(Long domainId){
+        DomainEntity entity= domainRepository.findByIdAndStatusNot(domainId,Status.DELETED);
+
+        if(entity == null){
+            logger.info("Không tìm thấy domain id {}",domainId);
+            throw new AppException(ErrorCode.ENTITY_NOT_FOUND);
+        }
+        return entity;
     }
 
 

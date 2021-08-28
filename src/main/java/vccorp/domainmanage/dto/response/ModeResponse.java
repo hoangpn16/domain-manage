@@ -3,7 +3,7 @@ package vccorp.domainmanage.dto.response;
 import lombok.Getter;
 import lombok.Setter;
 import vccorp.domainmanage.enumerates.Status;
-import vccorp.domainmanage.repository.entity.BasisDomainModeEntity;
+//import vccorp.domainmanage.repository.entity.BasisDomainModeEntity;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -18,5 +18,5 @@ public class ModeResponse{
     private Timestamp createdTime;
     private Timestamp updatedTime;
 
-    List<BasisDomainModeEntity> listBasisDomainModeEntity = new ArrayList<>();
+
 }

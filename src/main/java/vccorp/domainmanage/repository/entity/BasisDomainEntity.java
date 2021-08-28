@@ -17,12 +17,14 @@ public class BasisDomainEntity extends BaseEntity{
 
     @ManyToOne
     @JoinColumn(name = "domain_id")
-    private DomainEntity domain;
+    private DomainEntity domains;
 
     @ManyToOne
-    @JoinColumn(name = "current_mode_id")
-    private ModeEntity currentMode;
+    @JoinColumn(name = "mode_id")
+    private ModeEntity modes;
 
-    @OneToMany(mappedBy = "basisDomain")
-    private List<BasisDomainModeEntity> listBasisDomainModeEntity = new ArrayList<>();
+    @Column(name = "is_live")
+    private Boolean isLive;
+
+
 }
